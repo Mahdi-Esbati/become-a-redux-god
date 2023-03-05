@@ -1,5 +1,25 @@
+import { createStore } from './result/redux';
+import Provider from './result/react-redux/Provider';
+import Home from './Home';
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'TEST':
+      return { ...state, folan: action.payload };
+    default:
+      return state;
+  }
+};
+
 function App() {
-  return <div className="App">this is a test</div>;
+  const store = createStore(reducer, {});
+  return (
+    <Provider store={store}>
+      <div className="App">
+        <Home />
+      </div>
+    </Provider>
+  );
 }
 
 export default App;
