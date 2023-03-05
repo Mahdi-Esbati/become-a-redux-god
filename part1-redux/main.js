@@ -1,5 +1,6 @@
-import redux from './result/reduxStore';
-// import redux from './start/reduxStore';
+// import { createStore } from 'redux';
+import { createStore } from './result/reduxStore';
+// import { createStore } from './start/reduxStore';
 
 const displayText = document.getElementById('display');
 const subscribeButton = document.getElementById('subscribe');
@@ -14,7 +15,9 @@ const reducer = (state, action) => {
       return state;
   }
 };
-const store = redux.createStore(reducer, {});
+
+const store = createStore(reducer, {});
+let unsubscribe = null;
 
 const updateUI = () => {
   const state = store.getState();
@@ -30,11 +33,13 @@ dispatchButton.addEventListener('click', () => {
 });
 
 subscribeButton.addEventListener('click', () => {
-  store.subscribe(changeCallback);
+  unsubscribe = store.subscribe(changeCallback);
+  console.log('SUBSCRIBED', { unsubscribe });
 });
 
 unsubscribeButton.addEventListener('click', () => {
-  store.unsubscribe(changeCallback);
+  console.log('UNSUBSCRIBED');
+  unsubscribe();
 });
 
 updateUI();

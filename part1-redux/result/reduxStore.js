@@ -1,40 +1,34 @@
-let state = null;
+export function createStore(reducer, initialState) {
+  let currentReducer = reducer;
+  let currentState = initialState;
+  const listeners = [];
 
-let currentReducer = null;
-const listeners = [];
+  function notifyChanges() {
+    listeners.forEach((listener) => listener(currentState));
+  }
 
-function notifyChanges() {
-  listeners.forEach((listener) => listener(state));
-}
+  function dispatch(action) {
+    const newState = currentReducer(currentState, action);
+    currentState = newState;
+    notifyChanges();
+  }
 
-function dispatch(action) {
-  const newState = currentReducer(state, action);
-  state = newState;
-  notifyChanges();
-}
+  function getState() {
+    return currentState;
+  }
 
-function getState() {
-  return state;
-}
+  function subscribe(callback) {
+    listeners.push(callback);
 
-function subscribe(callback) {
-  listeners.push(callback);
-}
+    return function unsubscribe() {
+      const index = listeners.indexOf(callback);
+      listeners.splice(index, 1);
+    };
+  }
 
-function unsubscribe(callback) {
-  const index = listeners.indexOf(callback);
-  listeners.splice(index, 1);
-}
-
-function replaceReducer(reducer) {
-  currentReducer = reducer;
-}
-
-function createStore(reducer, initialState) {
-  currentReducer = reducer;
-  state = initialState;
+  function replaceReducer(reducer) {
+    currentReducer = reducer;
+  }
 
   return { dispatch, getState, subscribe, unsubscribe, replaceReducer };
 }
-
-export default { createStore };
