@@ -2,6 +2,8 @@ import { useContext } from 'react';
 
 import { useReduxContext } from './useReduxContext';
 import { ReactReduxContext } from '../Context';
+
+// https://beta.reactjs.org/reference/react/useSyncExternalStore
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 
 const refEquality = (a, b) => a === b;
