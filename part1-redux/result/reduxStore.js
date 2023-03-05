@@ -1,4 +1,8 @@
-export function createStore(reducer, initialState) {
+export function createStore(reducer, initialState, enhancer) {
+  if (typeof enhancer !== 'undefined') {
+    return enhancer(createStore)(reducer, initialState);
+  }
+
   let currentReducer = reducer;
   let currentState = initialState;
   const listeners = [];
