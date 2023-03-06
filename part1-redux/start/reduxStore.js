@@ -1,22 +1,13 @@
-let state = null;
+export function createStore(reducer, initialState) {
+  function notifyChanges() {}
 
-let currentReducer = null;
-const listeners = [];
+  function dispatch(action) {}
 
-function notifyChanges() {}
+  function getState() {}
 
-function dispatch(action) {}
+  function subscribe(callback) {}
 
-function getState() {}
+  function replaceReducer(reducer) {}
 
-function subscribe(callback) {}
-
-function unsubscribe(callback) {}
-
-function replaceReducer(reducer) {}
-
-function createStore(reducer, initialState) {
-  return { dispatch, getState, subscribe, unsubscribe, replaceReducer };
+  return { dispatch, getState, subscribe, replaceReducer };
 }
-
-export default { createStore };

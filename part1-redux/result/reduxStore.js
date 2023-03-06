@@ -8,7 +8,7 @@ export function createStore(reducer, initialState, enhancer) {
   const listeners = [];
 
   function notifyChanges() {
-    listeners.forEach((listener) => listener(currentState));
+    listeners.forEach((listener) => listener());
   }
 
   function dispatch(action) {
