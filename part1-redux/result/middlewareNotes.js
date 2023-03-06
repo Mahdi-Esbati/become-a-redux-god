@@ -2,9 +2,9 @@
 const store = createStore(reducer, {});
 
 // Solution 1
-// console.log('Dispatching an action');
-// store.dispatch({ type: 'FOLAN' });
-// console.log('next state', store.getState());
+console.log('Dispatching an action');
+store.dispatch({ type: 'FOLAN' });
+console.log('next state', store.getState());
 
 // Solution 2
 function dispatchAndLog(store, action) {
@@ -33,7 +33,6 @@ function patchStoreToAddLogging(store) {
   };
 }
 
-// Solution 5
 function patchStoreToAddReporting(store) {
   const next = store.dispatch;
   store.dispatch = (action) => {
@@ -45,9 +44,13 @@ function patchStoreToAddReporting(store) {
   };
 }
 
-function patchStoreToAddLogging(store) {
+patchStoreToAddLogging(store);
+patchStoreToAddReporting(store);
+
+// Solution 5
+function logger(store) {
   const next = store.dispatch;
-  store.dispatch = (action) => {
+  return function dispatchAndLog(action) {
     console.log('Dispatching an action', action);
     const result = next(action);
     console.log('NEXT STATE', store.getState());
@@ -55,16 +58,27 @@ function patchStoreToAddLogging(store) {
   };
 }
 
-patchStoreToAddLogging(store);
-patchStoreToAddReporting(store);
+function applyMiddlewares(store, middlewares) {
+  middlewares = middlewares.slice();
+  middlewares.forEach((middleware) => (store.dispatch = middleware(store)));
+}
+
+applyMiddlewares(store, [logger]);
 
 // Solution 6
-function applyMiddlewares(store, middlewares = []) {
+const logger = (store) => (next) => {
+  return function dispatchAndLog(action) {
+    console.log('Dispatching an action', action);
+    const result = next(action);
+    console.log('NEXT STATE', store.getState());
+    return result;
+  };
+};
+
+function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice();
-  middlewares.reverse();
 
   let dispatch = store.dispatch;
   middlewares.forEach((middleware) => (dispatch = middleware(store)(dispatch)));
-
-  store = { ...store, dispatch };
+  return { ...store, dispatch };
 }

@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 // import { createStore } from './result/reduxStore';
 // import { createStore } from './start/reduxStore';
 
-import applyMiddleware from './result/applyMiddleware';
+// import applyMiddleware from './result/applyMiddleware';
 
 const displayText = document.getElementById('display');
 const subscribeButton = document.getElementById('subscribe');
@@ -18,12 +18,12 @@ const reducer = (state, action) => {
   }
 };
 
-const logger = (store) => (next) => (action) => {
-  console.log('dispatching', action);
-  let result = next(action);
-  console.log('next state', store.getState());
-  return result;
-};
+// const logger = (store) => (next) => (action) => {
+//   console.log('dispatching', action);
+//   let result = next(action);
+//   console.log('next state', store.getState());
+//   return result;
+// };
 
 const store = createStore(reducer, {}, applyMiddleware(logger));
 let unsubscribe = null;
